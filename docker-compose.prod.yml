@@ -1,0 +1,17 @@
+version: "3.9"
+
+# Production environment override
+services:
+    php:
+        environment:
+            APP_SECRET: ${APP_SECRET}
+            APP_ENV: prod
+        restart: always
+
+    nginx:
+        build:
+            target: app_nginx_prod
+        restart: always
+
+    redis:
+        restart: always

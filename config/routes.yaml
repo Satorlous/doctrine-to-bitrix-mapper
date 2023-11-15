@@ -1,0 +1,29 @@
+shared.common.controllers:
+    resource:
+        path: ../src/Shared/Common/Controller/
+        namespace: App\Shared\Common\Controller
+    type: attribute
+
+product.review.controllers:
+    resource:
+        path: ../src/Product/Review/Controller/
+        namespace: App\Product\Review\Controller
+    type: attribute
+
+product.videocall.controllers:
+    resource:
+        path: ../src/Product/VideoCall/Controller/
+        namespace: App\Product\VideoCall\Controller
+    type: attribute
+
+product.contentblock.controllers:
+    resource:
+        path: ../src/Product/ContentBlocks/Controller/
+        namespace: App\Product\ContentBlocks\Controller
+    type: attribute
+
+product.pages.home.banners.controllers:
+    resource:
+        path: ../src/Pages/Home/Banners/Controller/
+        namespace: App\Pages\Home\Banners\Controller
+    type: attribute

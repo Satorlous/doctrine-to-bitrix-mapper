@@ -1,0 +1,74 @@
+doctrine:
+    dbal:
+        default_connection: bitrix
+        connections:
+            bitrix:
+                dbname: '%env(BX_DB_NAME)%'
+                host: '%env(BX_DB_HOST)%'
+                port: '%env(BX_DB_PORT)%'
+                user: '%env(BX_DB_USER)%'
+                password: '%env(BX_DB_PASSWORD)%'
+                server_version: '%env(BX_DB_VERSION)%'
+                driver: pdo_mysql
+    orm:
+        auto_generate_proxy_classes: true
+        enable_lazy_ghost_objects: true
+        default_entity_manager: bitrix_em
+        entity_managers:
+            bitrix_em:
+                connection: bitrix
+                report_fields_where_declared: true
+                validate_xml_mapping: true
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+                auto_mapping: true
+                metadata_cache_driver:
+                    type: pool
+                    pool: doctrine.metadata_cache_pool
+                mappings:
+                    Bitrix:
+                        type: attribute
+                        is_bundle: false
+                        dir: '%kernel.project_dir%/src/Bitrix/Entity'
+                        prefix: 'App\Bitrix\Entity'
+                        alias: System
+
+                    Review:
+                        type: attribute
+                        is_bundle: false
+                        dir: '%kernel.project_dir%/src/Product/Review/Entity'
+                        prefix: 'App\Product\Review\Entity'
+                        alias: Review
+
+                    ContentBlocks:
+                        type: attribute
+                        is_bundle: false
+                        dir: '%kernel.project_dir%/src/Product/ContentBlocks/Entity'
+                        prefix: 'App\Product\ContentBlocks\Entity'
+                        alias: ContentBlocks
+
+                    Banners:
+                        type: attribute
+                        is_bundle: false
+                        dir: '%kernel.project_dir%/src/Pages/Home/Banners/Entity'
+                        prefix: 'App\Pages\Home\Banners\Entity'
+                        alias: Banners
+
+when@test:
+    doctrine:
+        dbal:
+            # "TEST_TOKEN" is typically set by ParaTest
+            dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+
+when@prod:
+    doctrine:
+        orm:
+            auto_generate_proxy_classes: false
+            proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
+            entity_managers:
+                bitrix_em:
+                    query_cache_driver:
+                        type: pool
+                        pool: doctrine.query_cache_pool
+                    result_cache_driver:
+                        type: pool
+                        pool: doctrine.result_cache_pool

@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+    php:
+        build:
+            context: .
+            target: app_php
+            args:
+                SYMFONY_VERSION: ${SYMFONY_VERSION:-}
+                STABILITY: ${STABILITY:-stable}
+        depends_on:
+            - redis
+        restart: unless-stopped
+        environment:
+            HAS_DATABASE: ${HAS_DATABASE}
+        networks:
+            - app-network
+        container_name: ${APP_NAME}-php
+
+    nginx:
+        build:
+            context: .
+            target: app_nginx
+        depends_on:
+            - php
+        links:
+            - php
+        restart: unless-stopped
+        volumes:
+            - ./public:/srv/app/public:ro
+        ports:
+            # HTTP
+            -   target: 80
+                published: ${HTTP_PORT_PUBLIC:-80}
+                protocol: tcp
+            # HTTPS
+            -   target: 443
+                published: ${HTTPS_PORT_PUBLIC:-443}
+                protocol: tcp
+        networks:
+            - app-network
+        container_name: ${APP_NAME}-nginx
+
+    redis:
+        image: redis:7.2.3-alpine
+        restart: unless-stopped
+        volumes:
+            - redis-data:/data:rw
+        ports:
+            - ${REDIS_PORT_TARGET:-6379}
+        networks:
+            - app-network
+        container_name: ${APP_NAME}-redis
+
+volumes:
+    redis-data:
+
+networks:
+    app-network:
